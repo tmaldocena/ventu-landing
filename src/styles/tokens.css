@@ -1,0 +1,33 @@
+/* =========================================================
+   VentuUI — design tokens
+   Fuente de verdad en CSS. Cuando exportes los tokens desde
+   Figma (Ventu-tokens.json), actualizá SOLO este archivo.
+   Tailwind los consume desde src/index.css (@theme inline).
+   ========================================================= */
+:root {
+  /* Color — marca */
+  --ventu-primary: #c26745;        /* terracota */
+  --ventu-primary-600: #a9553a;
+  --ventu-primary-soft: #f4ded3;
+  --ventu-secondary: #0f2742;      /* azul oscuro */
+  --ventu-accent: #5b87a6;         /* celeste */
+  --ventu-accent-soft: #e3ecf2;
+
+  /* Color — neutros */
+  --ventu-neutral: #dad7d0;        /* gris claro */
+  --ventu-bg: #f7f2ea;             /* crema */
+  --ventu-surface: #ffffff;
+
+  /* Color — hero nocturno (tokens nuevos, a agregar en Figma) */
+  --ventu-night: #0a1b30;
+  --ventu-glow: #ffc93c;           /* brillo de las luciérnagas */
+
+  /* Radios */
+  --ventu-radius-sm: 10px;
+  --ventu-radius-md: 18px;
+  --ventu-radius-lg: 28px;
+
+  /* Sombras */
+  --ventu-shadow-sm: 0 1px 2px rgb(15 39 66 / 0.06), 0 4px 14px rgb(15 39 66 / 0.05);
+  --ventu-shadow-md: 0 10px 40px rgb(15 39 66 / 0.1);
+}

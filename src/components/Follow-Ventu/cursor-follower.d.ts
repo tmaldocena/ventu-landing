@@ -1,0 +1,1 @@
+export declare function mountCursorFollower(container: HTMLElement, options: { frames: Record<string, string>; size?: number; label?: string }): { destroy(): void; setDirection(direction: string): void; setTracking(enabled: boolean): void };

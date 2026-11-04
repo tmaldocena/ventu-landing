@@ -1,0 +1,207 @@
+@import "tailwindcss";
+@import "./styles/tokens.css";
+
+/* VentuUI → Tailwind. Usá: bg-cream, text-secondary, bg-primary, rounded-lg, font-display… */
+@theme inline {
+  --color-primary: var(--ventu-primary);
+  --color-primary-600: var(--ventu-primary-600);
+  --color-primary-soft: var(--ventu-primary-soft);
+  --color-secondary: var(--ventu-secondary);
+  --color-accent: var(--ventu-accent);
+  --color-accent-soft: var(--ventu-accent-soft);
+  --color-neutral: var(--ventu-neutral);
+  --color-cream: var(--ventu-bg);
+  --color-surface: var(--ventu-surface);
+  --color-night: var(--ventu-night);
+  --color-glow: var(--ventu-glow);
+
+  --radius-sm: var(--ventu-radius-sm);
+  --radius-md: var(--ventu-radius-md);
+  --radius-lg: var(--ventu-radius-lg);
+
+  --shadow-soft: var(--ventu-shadow-sm);
+  --shadow-lift: var(--ventu-shadow-md);
+
+  --font-display: "Nunito Variable", "Nunito", system-ui, sans-serif;
+  --font-body: "Nunito Variable", "Nunito", system-ui, sans-serif;
+}
+
+/* Animaciones del cielo nocturno */
+@theme {
+  --animate-twinkle: twinkle var(--t, 4s) ease-in-out var(--d, 0s) infinite;
+  --animate-fly: drift var(--drift, 16s) ease-in-out var(--d, 0s) infinite,
+    glow var(--g, 3s) ease-in-out var(--d, 0s) infinite;
+  --animate-glow: glow 2.8s ease-in-out infinite;
+  --animate-float: float 6s ease-in-out infinite;
+  --animate-float-slow: float 7s ease-in-out infinite;
+  --animate-breathe: breathe 6s ease-in-out infinite;
+
+  @keyframes twinkle {
+    0%, 100% { opacity: 0.15; }
+    50% { opacity: 0.95; }
+  }
+  @keyframes glow {
+    0%, 100% { opacity: 0.25; }
+    50% { opacity: 1; }
+  }
+  @keyframes drift {
+    0%, 100% { transform: translate(0, 0); }
+    33% { transform: translate(var(--dx, 30px), var(--dy, -30px)); }
+    66% { transform: translate(calc(var(--dx, 30px) * -0.6), calc(var(--dy, -30px) * 0.8)); }
+  }
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-12px); }
+  }
+  @keyframes breathe {
+    0%, 100% { opacity: 0.75; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.06); }
+  }
+}
+
+@utility bg-night-sky {
+  background:
+    radial-gradient(ellipse 60% 38% at 50% 70%, rgb(91 135 166 / 0.3), transparent 70%),
+    linear-gradient(180deg, var(--ventu-night) 0%, var(--ventu-secondary) 60%, #1b3c5e 100%);
+}
+
+@utility bg-placeholder {
+  background:
+    repeating-linear-gradient(45deg, transparent 0 14px, rgb(91 135 166 / 0.07) 14px 28px),
+    var(--ventu-accent-soft);
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 84px;
+  }
+  body {
+    background: var(--ventu-bg);
+    color: var(--ventu-secondary);
+    font-family: var(--font-body);
+    font-size: 17px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  h1, h2, h3 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    line-height: 1.08;
+    letter-spacing: -0.02em;
+  }
+  :focus-visible {
+    outline: 3px solid var(--ventu-accent);
+    outline-offset: 3px;
+  }
+  /* Sobre terracota el anillo celeste pierde contraste: en los bloques
+     marcados el foco pasa a crema. */
+  [data-on-primary] :focus-visible {
+    outline-color: var(--ventu-bg);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+  }
+}
+
+/* =========================================================
+   FAQ — apertura suave conservando <details>.
+
+   `::details-content` anima la altura real del panel sin tocar la
+   semántica ni el SEO. Si el navegador no lo soporta, el acordeón
+   sigue funcionando con el corte nativo.
+   ========================================================= */
+@supports (interpolate-size: allow-keywords) and selector(details::details-content) {
+  :root {
+    interpolate-size: allow-keywords;
+  }
+
+  [data-faq]::details-content {
+    block-size: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition:
+      block-size 260ms cubic-bezier(0.22, 1, 0.36, 1),
+      opacity 180ms ease,
+      content-visibility 260ms allow-discrete;
+  }
+
+  [data-faq][open]::details-content {
+    block-size: auto;
+    opacity: 1;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    [data-faq]::details-content {
+      transition: none;
+    }
+  }
+}
+
+/* =========================================================
+   “Tres pasos” — mazo de tarjetas.
+
+   `useGSAP` pone data-mode="stage" en la sección solo en desktop y
+   sin reduced motion. En mobile/tablet/reduced-motion no se toca nada:
+   queda la grilla normal con la ilustración arriba de cada card.
+
+   Las reglas van sin @layer a propósito: así le ganan a las utilidades
+   de Tailwind sin tener que pelear con especificidad.
+   ========================================================= */
+[data-stage-bg] {
+  display: none;
+}
+
+[data-mode="stage"] [data-stage-bg] {
+  display: block;
+}
+
+/* En desktop el empalme con el hero va dentro de la capa sticky. */
+[data-mode="stage"] [data-seam] {
+  display: none;
+}
+
+[data-mode="stage"] [data-stack] {
+  position: relative;
+  display: block;
+  max-width: 560px;
+  height: 470px;
+  margin-inline: auto;
+}
+
+[data-mode="stage"] [data-step] {
+  position: absolute;
+  inset-inline: 0;
+  top: 0;
+  height: 402px;
+  padding: 30px;
+  overflow: hidden;
+  /* Sobre el arte nocturno la card va sólida: el vidrio se ensuciaba y el
+     numeral perdía contraste. */
+  border: 1px solid rgb(255 255 255 / 0.22);
+  background: var(--ventu-bg);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.85),
+    0 30px 60px -22px rgb(0 0 0 / 0.62);
+  will-change: transform, opacity;
+}
+
+/* La ilustración de la card se reemplaza por el fondo de sección. */
+[data-mode="stage"] [data-step-art] {
+  display: none;
+}
+
+/* El fondo inline (desktop): el SVG ocupa toda la capa y GSAP anima sus
+   trazos/destellos. El encuadre `slice` se setea al procesar el archivo.
+   `will-change` se pone solo mientras la escena está activa (ver useArtFx):
+   promueve la capa para no re-rasterizar los filtros en cada frame, sin
+   reservar memoria de GPU cuando está fuera de pantalla. */
+[data-inline-art][data-animating] {
+  will-change: transform;
+}
+
+[data-inline-art] > svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
