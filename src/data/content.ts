@@ -17,7 +17,7 @@ export const appLinks: {
   playStore?: string;
 } = {
   status: "soon",
-  web: "",
+  web: "https://ventu-one.vercel.app",
   appStore: "",
   playStore: "",
 };
