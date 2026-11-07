@@ -144,7 +144,7 @@ export function Nav() {
           </ul>
         </nav>
         <Button
-          href={appPrimaryLink}
+          href="https://ventu-one.vercel.app"
           size="sm"
           target={appPrimaryLink.startsWith("http") ? "_blank" : undefined}
           rel={appPrimaryLink.startsWith("http") ? "noopener noreferrer" : undefined}
